@@ -1,0 +1,65 @@
+Reconstruct Itinerary
+
+Given a list of airline tickets represented by pairs of departure and arrival airports [from, to], reconstruct the itinerary in order. All of the tickets belong to a man who departs from JFK. Thus, the itinerary must begin with JFK.
+
+Note:
+
+If there are multiple valid itineraries, you should return the itinerary that has the smallest lexical order when read as a single string. For example, the itinerary ["JFK", "LGA"] has a smaller lexical order than ["JFK", "LGB"].
+All airports are represented by three capital letters (IATA code).
+You may assume all tickets form at least one valid itinerary.
+One must use all the tickets once and only once.
+Example 1:
+
+Input: [["MUC", "LHR"], ["JFK", "MUC"], ["SFO", "SJC"], ["LHR", "SFO"]]
+Output: ["JFK", "MUC", "LHR", "SFO", "SJC"]
+Example 2:
+
+Input: [["JFK","SFO"],["JFK","ATL"],["SFO","ATL"],["ATL","JFK"],["ATL","SFO"]]
+Output: ["JFK","ATL","JFK","SFO","ATL","SFO"]
+Explanation: Another possible reconstruction is ["JFK","SFO","ATL","JFK","ATL","SFO"].
+             But it is larger in lexical order.
+             
+             
+Solution
+
+class Solution {
+    Map<String,PriorityQueue<String>> map;
+    public List<String> findItinerary(List<List<String>> tickets) {
+        map=new HashMap<>(); 
+        for(List<String> li: tickets){
+            String from=li.get(0);
+            String to=li.get(1);
+            if(map.containsKey(from)){
+                map.get(from).add(to);
+            }else{
+                map.put(from,new PriorityQueue<>());
+                map.get(from).add(to);
+            }
+            
+            
+        }
+    
+        
+        List<String> res=new ArrayList<>();
+        
+            dfs(res,"JFK"); 
+        
+      //  System.out.println(res);
+        Collections.reverse(res);
+        return res;
+   
+        }
+    
+    
+    
+    public void dfs(List<String> res,String curr){
+       PriorityQueue<String> pr=map.get(curr);
+        while(pr!=null&&!pr.isEmpty()){
+            dfs(res,pr.poll());
+            
+        }
+        res.add(curr);
+ 
+    }
+    
+    }
